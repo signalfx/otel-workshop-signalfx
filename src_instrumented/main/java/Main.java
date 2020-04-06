@@ -1,3 +1,4 @@
+import io.github.cdimascio.dotenv.Dotenv;
 import io.grpc.Context;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -47,18 +48,16 @@ public class Main {
     }
 
     private com.sun.net.httpserver.HttpServer server;
-    private static int port = 3000;
+    private static int port;
     private Main() throws IOException {
-        this(port);
-    }
-
-    private Main(int port) throws IOException {
+        Dotenv dotenv = Dotenv.load();
+        port = Integer.parseInt(dotenv.get("SERVER_PORT"));
         initTracer();
         server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(port), 0);
         // Test urls
         server.createContext("/", new HelloHandler());
         server.start();
-        System.out.println("Server ready on http://127.0.0.1:" + port);
+        System.out.println("Server ready on http://localhost:" + port);
     }
 
     // OTel API
