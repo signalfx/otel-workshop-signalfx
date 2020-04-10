@@ -1,60 +1,67 @@
 <project>
-    <!-- model version - always 4.0.0 for Maven 2.x POMs -->
-    <modelVersion>4.0.0</modelVersion>
+  <!-- model version - always 4.0.0 for Maven 2.x POMs -->
+  <artifactId>java-app</artifactId>
 
-    <!-- project coordinates - values which uniquely identify this project -->
-    <groupId>otel.workshop.java</groupId>
-    <artifactId>java-app</artifactId>
-    <version>1.0</version>
+  <!-- project coordinates - values which uniquely identify this project -->
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <index>true</index>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.0.2</version>
+      </plugin>
 
-    <!-- library dependencies -->
-    <dependencies>
-        <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>java-dotenv</artifactId>
-            <version>5.1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-context</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-    </dependencies>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <id>copy-dependencies</id>
+            <phase>compile</phase>
+          </execution>
+        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>2.4</version>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <artifactId>java-dotenv</artifactId>
+      <groupId>io.github.cdimascio</groupId>
+      <version>5.1.3</version>
+    </dependency>
+    <dependency>
+      <artifactId>grpc-context</artifactId>
+      <groupId>io.grpc</groupId>
+      <version>1.28.0</version>
+    </dependency>
+    <dependency>
+      <artifactId>opentelemetry-api</artifactId>
+      <groupId>io.opentelemetry</groupId>
+      <version>0.3.0</version>
+    </dependency>
+  </dependencies>
+  <groupId>otel.workshop.java</groupId>
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+  <!-- library dependencies -->
+  <modelVersion>4.0.0</modelVersion>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <archive>
-                        <index>true</index>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>compile</phase>
-                        <goals><goal>copy-dependencies</goal></goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+  <version>1.0</version>
 </project>
