@@ -57,11 +57,14 @@ public final class HttpServer implements AutoCloseable {
     @Override
     public void handle(HttpExchange he) throws IOException {
       Span span =
-          tracer.spanBuilder(he.getHttpContext().getPath()).setSpanKind(Span.Kind.SERVER).startSpan();
+          tracer
+              .spanBuilder(he.getHttpContext().getPath())
+              .setSpanKind(Span.Kind.SERVER)
+              .startSpan();
       try {
         span.setAttribute("uri", he.getRequestURI().toString());
 
-        try (Scope scope = TracingContextUtils.currentContextWith(span)) {
+        try (Scope ignored = TracingContextUtils.currentContextWith(span)) {
           // Pass the request to the wrapped
           wrappedHandler.handle(he);
         }
