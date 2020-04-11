@@ -8,7 +8,6 @@ import httpserver.HttpServer;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
 public class FrontEnd implements AutoCloseable {
@@ -19,7 +18,7 @@ public class FrontEnd implements AutoCloseable {
     int frontendServerPort = Integer.parseInt(dotenv.get("FRONTEND_SERVER_PORT"));
     int backendServerPort = Integer.parseInt(dotenv.get("BACKEND_SERVER_PORT"));
     this.httpServer =
-        HttpServer.newBuilder(new InetSocketAddress(frontendServerPort))
+        HttpServer.newBuilder(frontendServerPort)
             .addHandler("/frontend", new Handler(backendServerPort))
             .build();
   }
@@ -33,18 +32,30 @@ public class FrontEnd implements AutoCloseable {
     private final HttpClient httpClient;
 
     private Handler(int backendServerPort) {
-      System.out.println("Backend address: 127.0.0.1" + backendServerPort + "/" + "backend");
       this.httpClient = new HttpClient(backendServerPort);
     }
 
     @Override
-    public void handle(HttpExchange he) throws IOException {
+    public void handle(HttpExchange httpExchange) throws IOException {
       HttpResult result = httpClient.sendGet("backend");
-      he.sendResponseHeaders(
+      httpExchange.sendResponseHeaders(
           result.getHttpResponseCode(), result.getHttpResponseContent().length());
-      try (OutputStream os = he.getResponseBody()) {
+      try (OutputStream os = httpExchange.getResponseBody()) {
         os.write(result.getHttpResponseContent().getBytes(Charset.defaultCharset()));
       }
     }
+  }
+
+  /**
+   * Main method to run the example.
+   *
+   * @param args It is not required.
+   * @throws IOException Something might go wrong.
+   */
+  public static void main(String[] args) throws IOException {
+    final FrontEnd frontEnd = new FrontEnd();
+
+    // Gracefully close the servers
+    Runtime.getRuntime().addShutdownHook(new Thread(frontEnd::close));
   }
 }

@@ -5,3 +5,9 @@
 
 # Maven
 target
+
+# Gradle
+build
+.gradle
+local.properties
+out/

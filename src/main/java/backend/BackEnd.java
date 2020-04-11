@@ -6,7 +6,6 @@ import httpserver.HttpServer;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
 public final class BackEnd implements AutoCloseable {
@@ -16,7 +15,7 @@ public final class BackEnd implements AutoCloseable {
     Dotenv dotenv = Dotenv.load();
     int backendServerPort = Integer.parseInt(dotenv.get("BACKEND_SERVER_PORT"));
     this.httpServer =
-        HttpServer.newBuilder(new InetSocketAddress(backendServerPort))
+        HttpServer.newBuilder(backendServerPort)
             .addHandler("/backend", new Handler())
             .build();
   }
@@ -45,5 +44,18 @@ public final class BackEnd implements AutoCloseable {
     private void doWork() throws InterruptedException {
       Thread.sleep(1000, 0);
     }
+  }
+
+  /**
+   * Main method to run the example.
+   *
+   * @param args It is not required.
+   * @throws IOException Something might go wrong.
+   */
+  public static void main(String[] args) throws IOException {
+    final BackEnd backEnd = new BackEnd();
+
+    // Gracefully close the servers
+    Runtime.getRuntime().addShutdownHook(new Thread(backEnd::close));
   }
 }
