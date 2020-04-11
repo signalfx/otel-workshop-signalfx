@@ -50,10 +50,22 @@
     <dependency>
       <artifactId>opentelemetry-api</artifactId>
       <groupId>io.opentelemetry</groupId>
-      <version>0.3.0</version>
+      <version>0.4.0-20200410.183412-32</version>
+    </dependency>
+    <dependency>
+      <artifactId>opentelemetry-context-prop</artifactId>
+      <groupId>io.opentelemetry</groupId>
+      <version>0.4.0-20200410.183412-32</version>
     </dependency>
   </dependencies>
   <groupId>otel.workshop.java</groupId>
+
+  <repositories>
+    <repository>
+      <id>oss.sonatype.org-snapshot</id>
+      <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+    </repository>
+  </repositories>
 
   <!-- library dependencies -->
   <modelVersion>4.0.0</modelVersion>

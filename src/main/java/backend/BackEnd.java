@@ -28,15 +28,22 @@ public final class BackEnd implements AutoCloseable {
 
   private static final class Handler implements HttpHandler {
     @Override
-    public void handle(HttpExchange he) throws IOException {
-
+    public void handle(HttpExchange httpExchange) throws IOException {
       // Process the request
       String response = "hello from java\n this is the end of the journey... for today";
-      he.sendResponseHeaders(200, response.length());
-      try (OutputStream os = he.getResponseBody()) {
+      try {
+        doWork();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      httpExchange.sendResponseHeaders(200, response.length());
+      try (OutputStream os = httpExchange.getResponseBody()) {
         os.write(response.getBytes(Charset.defaultCharset()));
       }
-      System.out.println("Served Client: " + he.getRemoteAddress());
+    }
+
+    private void doWork() throws InterruptedException {
+      Thread.sleep(1000, 0);
     }
   }
 }
