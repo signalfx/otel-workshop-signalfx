@@ -51,15 +51,15 @@ steps can be found in `/src/main/java`. Have suggestions on how to improve this 
 ## Setting up the environment.
 
 1. Configure the [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector)
-- Go to `otelcol/otel-collector-config.yaml`
-- Update the `attributes` processor to set your name as the `environment` key value.
-```dtd
-  attributes:
-    actions:
-      - key: "environment"
-        value: "<insert-your-name-here>"
-        action: insert
-```
+    - Go to `otelcol/otel-collector-config.yaml`
+    - Update the `attributes` processor to set your name as the `environment` key value.
+    ```dtd
+      attributes:
+        actions:
+          - key: "environment"
+            value: "<insert-your-name-here>"
+            action: insert
+    ```
 1. Start `otelcol` by calling `make SIGNALFX_TOKEN="YOUR_TOKEN_HERE" run-otelcol`.
 1. Start redis by calling `make run-redis`.
 1. Start the Backend by calling `make run-backend`.
