@@ -3,6 +3,8 @@ export FRONTEND_SERVER_PORT=50001
 
 DEFAULT_REDIS_PORT=6379
 
+CURRENT_DIR := ${PWD}
+
 .DEFAULT_GOAL := compile
 
 .PHONY: list-all-containers
@@ -23,7 +25,7 @@ stop-redis:
 .PHONY: run-otelcol
 run-otelcol:
 	docker run -d -p 55680:55680 --name otelcol_workshop \
-    -v $(shell pwd)/otelcol/otel-collector-config.yaml:/otel-collector-config.yaml \
+    -v $(CURRENT_DIR)/otelcol/otel-collector-config.yaml:/otel-collector-config.yaml \
     --env SIGNALFX_TOKEN \
 	otel/opentelemetry-collector-contrib-dev:b18c1ca932cc35f4a69d8992b391e6875c93da1d \
 	--config otel-collector-config.yaml
